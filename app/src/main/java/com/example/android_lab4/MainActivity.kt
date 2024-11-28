@@ -9,6 +9,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val questionList = listOf(
+            Question(R.string.question_1, true),
+            Question(R.string.question_2, true),
+            Question(R.string.question_3, false),
+            Question(R.string.question_4, true),
+            Question(R.string.question_5, true),
+            Question(R.string.question_6, true),
+            Question(R.string.question_7, false),
+            Question(R.string.question_8, true),
+            Question(R.string.question_9, true),
+            Question(R.string.question_10, true)
+
+        )
+
         val trueButton = findViewById<Button>(R.id.true_button)
         val falseButton = findViewById<Button>(R.id.false_button)
         val nextButton = findViewById<Button>(R.id.next_button)
@@ -27,5 +41,7 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener { _ ->
 
         }
+
+
     }
 }

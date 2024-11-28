@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Android_lab4</string>
+
+    <string name="question_1">Является ли Россия самой большой страной в мире?</string>
+    <string name="question_2">Находится ли Эверест в Гималаях?</string>
+    <string name="question_3">Расположен ли город Токио в Европе? </string>
+    <string name="question_4">Протекает ли река Нил через Египет?</string>
+    <string name="question_5">Находятся ли Гавайские острова в Тихом океане?</string>
+    <string name="question_6">Является ли Антарктида континентом?</string>
+    <string name="question_7">Можно ли найти пустыню Сахара в Азии?</string>
+    <string name="question_8">Располагается ли озеро Байкал в России?</string>
+    <string name="question_9">Есть ли на территории Австралии Большой Барьерный риф?</string>
+    <string name="question_10">Находится ли столица Франции на берегу Средиземного моря?</string>
+
 </resources>
