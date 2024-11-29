@@ -9,53 +9,35 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
+    val questionList = listOf(
+        Question(R.string.question_1, true),
+        Question(R.string.question_2, true),
+        Question(R.string.question_3, false),
+        Question(R.string.question_4, true),
+        Question(R.string.question_5, true),
+        Question(R.string.question_6, true),
+        Question(R.string.question_7, false),
+        Question(R.string.question_8, true),
+        Question(R.string.question_9, true),
+        Question(R.string.question_10, true)
+    )
 
+    private lateinit var trueButton: Button
+    private lateinit var falseButton: Button
+    private lateinit var nextButton: Button
+    private lateinit var questionText: TextView
+
+    var currentIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val questionList = listOf(
-            Question(R.string.question_1, true),
-            Question(R.string.question_2, true),
-            Question(R.string.question_3, false),
-            Question(R.string.question_4, true),
-            Question(R.string.question_5, true),
-            Question(R.string.question_6, true),
-            Question(R.string.question_7, false),
-            Question(R.string.question_8, true),
-            Question(R.string.question_9, true),
-            Question(R.string.question_10, true)
-        )
+        trueButton = findViewById<Button>(R.id.true_button)
+        falseButton = findViewById<Button>(R.id.false_button)
+        nextButton = findViewById<Button>(R.id.next_button)
+        questionText = findViewById<TextView>(R.id.question_text)
 
-        val trueButton = findViewById<Button>(R.id.true_button)
-        val falseButton = findViewById<Button>(R.id.false_button)
-        val nextButton = findViewById<Button>(R.id.next_button)
-        val questionText = findViewById<TextView>(R.id.question_text)
-
-        var currentIndex: Int = 0
-
-        fun updateQuestion(currentIndex: Int)
-        {
-            val questionTextResId = getString(questionList[currentIndex].textResId)
-            questionText.setText(questionTextResId)
-        }
-
-        fun checkAnswer(userAnswer: Boolean)
-        {
-            val correctAnswer = questionList[currentIndex].answer
-
-            val messageResId = if(userAnswer == correctAnswer)
-            {
-                R.string.correct_toast
-            }
-            else
-            {
-                R.string.incorrect_toast
-            }
-
-            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-        }
 
         trueButton.setOnClickListener { _ ->
             checkAnswer(true)
@@ -71,5 +53,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateQuestion(currentIndex)
+    }
+
+    fun updateQuestion(currentIndex: Int)
+    {
+        val questionTextResId = getString(questionList[currentIndex].textResId)
+        questionText.setText(questionTextResId)
+    }
+
+    fun checkAnswer(userAnswer: Boolean)
+    {
+        val correctAnswer = questionList[currentIndex].answer
+
+        val messageResId = if(userAnswer == correctAnswer)
+        {
+            R.string.correct_toast
+        }
+        else
+        {
+            R.string.incorrect_toast
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 }
