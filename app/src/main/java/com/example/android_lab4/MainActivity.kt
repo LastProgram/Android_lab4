@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
 
         nextButton.setOnClickListener { _ ->
             currentIndex = (currentIndex + 1) % questionList.size
+            if(currentIndex == 9)
+            {
+                nextButton.visibility = View.INVISIBLE
+            }
             updateQuestion(currentIndex)
             showAnswerButtons()
         }
