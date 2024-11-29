@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionText: TextView
 
     var currentIndex = 0
+    var countRightAnswers = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +90,19 @@ class MainActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
 
+        if(userAnswer == correctAnswer)
+        {
+            countRightAnswers++
+        }
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
         hideAnswerButtons()
+
+        if(currentIndex == 9)
+        {
+            val outputText = "Правильных ответов: " + countRightAnswers.toString()
+            questionText.setText(outputText)
+        }
     }
 
     fun hideAnswerButtons()
