@@ -12,4 +12,7 @@
     <string name="question_9">Есть ли на территории Австралии Большой Барьерный риф?</string>
     <string name="question_10">Находится ли столица Франции на берегу Средиземного моря?</string>
 
+    <string name="correct_toast">Верно!</string>
+    <string name="incorrect_toast">Неверно!</string>
+
 </resources>

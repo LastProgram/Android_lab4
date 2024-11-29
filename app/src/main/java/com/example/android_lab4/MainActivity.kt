@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity() {
             Question(R.string.question_8, true),
             Question(R.string.question_9, true),
             Question(R.string.question_10, true)
-
         )
 
         val trueButton = findViewById<Button>(R.id.true_button)
@@ -41,20 +41,35 @@ class MainActivity : AppCompatActivity() {
             questionText.setText(questionTextResId)
         }
 
-        trueButton.setOnClickListener { _ ->
+        fun checkAnswer(userAnswer: Boolean)
+        {
+            val correctAnswer = questionList[currentIndex].answer
 
+            val messageResId = if(userAnswer == correctAnswer)
+            {
+                R.string.correct_toast
+            }
+            else
+            {
+                R.string.incorrect_toast
+            }
+
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        }
+
+        trueButton.setOnClickListener { _ ->
+            checkAnswer(true)
         }
 
         falseButton.setOnClickListener { _ ->
-
+            checkAnswer(false)
         }
-
 
         nextButton.setOnClickListener { _ ->
             currentIndex = (currentIndex + 1) % questionList.size
             updateQuestion(currentIndex)
         }
 
-
+        updateQuestion(currentIndex)
     }
 }
