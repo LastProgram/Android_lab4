@@ -27,10 +27,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: Button
     private lateinit var questionText: TextView
 
-    var currentIndex: Int = 0
+    var currentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            currentIndex = savedInstanceState.getInt("currentIndex")
+        }
+
         setContentView(R.layout.activity_main)
 
         trueButton = findViewById<Button>(R.id.true_button)
@@ -53,6 +58,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateQuestion(currentIndex)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("currentIndex", currentIndex)
     }
 
     fun updateQuestion(currentIndex: Int)
