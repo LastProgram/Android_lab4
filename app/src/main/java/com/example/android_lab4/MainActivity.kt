@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener { _ ->
             currentIndex = (currentIndex + 1) % questionList.size
             updateQuestion(currentIndex)
+            showAnswerButtons()
         }
 
         updateQuestion(currentIndex)
@@ -85,5 +86,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        hideAnswerButtons()
+    }
+
+    fun hideAnswerButtons()
+    {
+        trueButton.visibility = View.INVISIBLE;
+        falseButton.visibility = View.INVISIBLE;
+    }
+
+    fun showAnswerButtons()
+    {
+        trueButton.visibility = View.VISIBLE;
+        falseButton.visibility = View.VISIBLE;
     }
 }
