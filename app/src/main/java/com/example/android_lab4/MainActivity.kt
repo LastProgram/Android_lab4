@@ -6,35 +6,25 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+
 
 class MainActivity : AppCompatActivity() {
 
-    val questionList = listOf(
-        Question(R.string.question_1, true),
-        Question(R.string.question_2, true),
-        Question(R.string.question_3, false),
-        Question(R.string.question_4, true),
-        Question(R.string.question_5, true),
-        Question(R.string.question_6, true),
-        Question(R.string.question_7, false),
-        Question(R.string.question_8, true),
-        Question(R.string.question_9, true),
-        Question(R.string.question_10, true)
-    )
+    private val quizViewModel: QuizViewModel by lazy {
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
     private lateinit var questionText: TextView
 
-    var currentIndex = 0
-    var countRightAnswers = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt("currentIndex")
+            //currentIndex = savedInstanceState.getInt("currentIndex")
         }
 
         setContentView(R.layout.activity_main)
@@ -54,54 +44,52 @@ class MainActivity : AppCompatActivity() {
         }
 
         nextButton.setOnClickListener { _ ->
-            currentIndex = (currentIndex + 1) % questionList.size
-            if(currentIndex == 9)
-            {
-                nextButton.visibility = View.INVISIBLE
-            }
-            updateQuestion(currentIndex)
+           quizViewModel.moveToNext()
+            updateQuestion()
             showAnswerButtons()
         }
 
-        updateQuestion(currentIndex)
+        updateQuestion()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("currentIndex", currentIndex)
+        outState.putInt("currentIndex", quizViewModel.currentIndex)
     }
 
-    fun updateQuestion(currentIndex: Int)
+    fun updateQuestion()
     {
-        val questionTextResId = getString(questionList[currentIndex].textResId)
+        val questionTextResId = quizViewModel.currentQuestionText
         questionText.setText(questionTextResId)
     }
 
     fun checkAnswer(userAnswer: Boolean)
     {
-        val correctAnswer = questionList[currentIndex].answer
+        val correctAnswer = quizViewModel.currentQuestionAnswer
 
-        val messageResId = if(userAnswer == correctAnswer)
+        val messageResId: String
+        if(userAnswer == correctAnswer)
         {
-            R.string.correct_toast
+            quizViewModel.countRightAnswers++
+            messageResId = R.string.correct_toast.toString()
         }
         else
         {
-            R.string.incorrect_toast
+            messageResId = R.string.incorrect_toast.toString()
         }
-
-        if(userAnswer == correctAnswer)
-        {
-            countRightAnswers++
-        }
-
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-        hideAnswerButtons()
 
-        if(currentIndex == 9)
+        hideAnswerButtons()
+        checkResultOutput()
+    }
+
+    fun checkResultOutput()
+    {
+        if(quizViewModel.isEndQuestion())
         {
-            val outputText = "Правильных ответов: " + countRightAnswers.toString()
-            questionText.setText(outputText)
+            nextButton.visibility = View.INVISIBLE
+            val finalText = "Правильных ответов: " + quizViewModel.countRightAnswers.toString()
+            questionText.setText(finalText)
         }
     }
 
