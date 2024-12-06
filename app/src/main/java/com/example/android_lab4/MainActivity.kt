@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 
+private const val KEY_INDEX = "index"
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,9 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            //currentIndex = savedInstanceState.getInt("currentIndex")
-        }
+        quizViewModel.currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?:0
 
         setContentView(R.layout.activity_main)
 
@@ -49,12 +48,14 @@ class MainActivity : AppCompatActivity() {
             showAnswerButtons()
         }
 
-        updateQuestion()
+        if(!checkResultOutput()){
+            updateQuestion()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("currentIndex", quizViewModel.currentIndex)
+        outState.putInt(KEY_INDEX, quizViewModel.currentIndex)
     }
 
     fun updateQuestion()
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         checkResultOutput()
     }
 
-    fun checkResultOutput()
+    fun checkResultOutput() : Boolean
     {
         if(quizViewModel.isEndQuestion())
         {
@@ -91,6 +92,8 @@ class MainActivity : AppCompatActivity() {
             val finalText = "Правильных ответов: " + quizViewModel.countRightAnswers.toString()
             questionText.setText(finalText)
         }
+
+        return quizViewModel.isEndQuestion()
     }
 
     fun hideAnswerButtons()
