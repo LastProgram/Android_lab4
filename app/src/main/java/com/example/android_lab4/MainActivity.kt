@@ -1,5 +1,7 @@
 package com.example.android_lab4
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 
 private const val KEY_INDEX = "index"
+private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var cheatButton: Button
     private lateinit var questionText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         trueButton = findViewById<Button>(R.id.true_button)
         falseButton = findViewById<Button>(R.id.false_button)
         nextButton = findViewById<Button>(R.id.next_button)
+        cheatButton = findViewById<Button>(R.id.cheat_button)
         questionText = findViewById<TextView>(R.id.question_text)
 
 
@@ -48,8 +53,28 @@ class MainActivity : AppCompatActivity() {
             showAnswerButtons()
         }
 
+        cheatButton.setOnClickListener { _ ->
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+            cheatButton.visibility = View.INVISIBLE
+        }
+
         if(!checkResultOutput()){
             updateQuestion()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_CODE_CHEAT)
+        {
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
     }
 
@@ -68,16 +93,17 @@ class MainActivity : AppCompatActivity() {
     {
         val correctAnswer = quizViewModel.currentQuestionAnswer
 
-        val messageResId: String
+        val messageResId = when {
+            quizViewModel.isCheater -> R.string.judjment_toast
+            userAnswer == correctAnswer -> R.string.correct_toast
+            else -> R.string.incorrect_toast
+        }
+
         if(userAnswer == correctAnswer)
         {
             quizViewModel.countRightAnswers++
-            messageResId = R.string.correct_toast.toString()
         }
-        else
-        {
-            messageResId = R.string.incorrect_toast.toString()
-        }
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
 
         hideAnswerButtons()
@@ -100,11 +126,20 @@ class MainActivity : AppCompatActivity() {
     {
         trueButton.visibility = View.INVISIBLE;
         falseButton.visibility = View.INVISIBLE;
+        if(cheatButton.visibility == View.VISIBLE)
+        {
+            cheatButton.visibility = View.INVISIBLE
+        }
     }
 
     fun showAnswerButtons()
     {
         trueButton.visibility = View.VISIBLE;
         falseButton.visibility = View.VISIBLE;
+
+        if(cheatButton.visibility == View.INVISIBLE)
+        {
+            cheatButton.visibility = View.VISIBLE
+        }
     }
 }

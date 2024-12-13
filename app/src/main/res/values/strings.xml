@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Android_lab4</string>
 
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+
     <string name="question_1">Является ли Россия самой большой страной в мире?</string>
     <string name="question_2">Находится ли Эверест в Гималаях?</string>
     <string name="question_3">Расположен ли город Токио в Европе? </string>
@@ -14,5 +17,10 @@
 
     <string name="correct_toast">Верно!</string>
     <string name="incorrect_toast">Неверно!</string>
+
+    <string name="warning_text">Вы уверены, что хотите сделать это?</string>
+    <string name="show_answer_button">Показать ответ</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judjment_toast">Ошибка подсказки</string>
 
 </resources>
