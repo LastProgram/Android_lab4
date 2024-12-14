@@ -1,7 +1,10 @@
 package com.example.android_lab4
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +12,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-
 private const val KEY_INDEX = "index"
 private const val REQUEST_CODE_CHEAT = 0
 
@@ -53,12 +55,19 @@ class MainActivity : AppCompatActivity() {
             showAnswerButtons()
         }
 
-        cheatButton.setOnClickListener { _ ->
-            val answerIsTrue = quizViewModel.currentQuestionAnswer
-            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+        cheatButton.setOnClickListener { view ->
+            if(quizViewModel.countCheat > 0)
+            {
+                val answerIsTrue = quizViewModel.currentQuestionAnswer
+                val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue, Build.VERSION.SDK_INT, quizViewModel.countCheat)
+                val dsd = startActivityForResult(intent, REQUEST_CODE_CHEAT)
+                cheatButton.visibility = View.INVISIBLE
+            }
+            else
+            {
+                Toast.makeText(this, R.string.num_toast, Toast.LENGTH_SHORT).show()
+            }
 
-            startActivityForResult(intent, REQUEST_CODE_CHEAT)
-            cheatButton.visibility = View.INVISIBLE
         }
 
         if(!checkResultOutput()){
@@ -75,6 +84,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_CHEAT)
         {
             quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            if(quizViewModel.countCheat > 0)
+            {
+                quizViewModel.countCheat--
+            }
         }
     }
 
@@ -115,8 +128,7 @@ class MainActivity : AppCompatActivity() {
         if(quizViewModel.isEndQuestion())
         {
             nextButton.visibility = View.INVISIBLE
-            val finalText = "Правильных ответов: " + quizViewModel.countRightAnswers.toString()
-            questionText.setText(finalText)
+            questionText.setText(getString(R.string.final_text, quizViewModel.countRightAnswers))
         }
 
         return quizViewModel.isEndQuestion()

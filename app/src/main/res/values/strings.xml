@@ -23,4 +23,8 @@
     <string name="cheat_button">Cheat!</string>
     <string name="judjment_toast">Ошибка подсказки</string>
 
+    <string name="end_toast">Подсказки закончились</string>
+    <string name="num_toast">Осталось %i подсказок</string>
+    <string name="final_text">Правильных ответов %i</string>
+
 </resources>

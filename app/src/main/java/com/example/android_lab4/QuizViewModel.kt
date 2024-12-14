@@ -19,6 +19,7 @@ class QuizViewModel : ViewModel() {
     var currentIndex = 0
     var countRightAnswers = 0
     var isCheater = false
+    var countCheat = 3;
 
     init {
 
